@@ -6,6 +6,7 @@ import {
   selectError,
   selectLoading,
   selectSuccessChangePass,
+  setError,
   setSuccessChangePass,
 } from "../feature/userSlice";
 import { ToastContainer, toast } from "react-toastify";
@@ -55,22 +56,26 @@ function ChangePassword() {
     verificationCodes: "",
   });
   useEffect(() => {
-      if (success) {
-        toast.success("Đổi mật khẩu thành công !", {
-          position: toast.POSITION.TOP_RIGHT,
-          type: toast.TYPE.SUCCESS,
-        });
-        dispatch(setSuccessChangePass(false));
-        setTimeout(() => {
-          navigate("/");
-        }, 5000);
-      } else if (error) {
-        toast.error("Đổi mật khẩu thất bại !", {
+    if (success) {
+      toast.success("Đổi mật khẩu thành công !", {
+        position: toast.POSITION.TOP_RIGHT,
+        type: toast.TYPE.SUCCESS,
+      });
+      dispatch(setSuccessChangePass(false));
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
+    } else if (error) {
+      toast.error(
+        "Đổi mật khẩu thất bại, hãy kiểm tra lại địa chỉ Email của bạn !",
+        {
           position: toast.POSITION.TOP_RIGHT,
           type: toast.TYPE.ERROR,
-        });
-      }
-  }, [success]);
+        }
+      );
+      dispatch(setError(null));
+    }
+  }, [success, error]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,16 +85,26 @@ function ChangePassword() {
     }));
   };
 
+  const getLocalStorageWithExpiry = (key) => {
+    const itemStr = localStorage.getItem(key);
+    if (!itemStr) {
+      return null;
+    }
+    const item = JSON.parse(itemStr);
+    const now = new Date();
+    if (now.getTime() > item.expiredTime) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.verificationCodes;
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    let checkCode = localStorage.getItem("codePass");
+    let checkCode = getLocalStorageWithExpiry("codePass");
     if (checkCode === formik.values.verificationCodes) {
       dispatch(changePasswordUser(formik.values));
       dispatch(setSuccessChangePass(false));
-      // toast.success("Đang thay đổi mật khẩu ... !", {
-        // position: toast.POSITION.TOP_RIGHT,
-        // type: toast.TYPE.DEFAULT,
-      // });
     } else {
       toast.error("Mã xác thực sai !", {
         position: toast.POSITION.TOP_RIGHT,

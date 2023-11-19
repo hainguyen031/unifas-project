@@ -10,6 +10,7 @@ import {
   selectLoading,
   selectSuccess,
   selectUserCodePass,
+  setError,
   setSuccess,
 } from "../feature/userSlice";
 
@@ -35,27 +36,37 @@ function ForgetPassword() {
     email: "",
   });
 
+  const setLocalStorageWithExpiry = (key, value, time) => {
+    const now = new Date();
+    const item = {
+      verificationCodes: value,
+      expiredTime: now.getTime() + time * 60 * 1000,
+    };
+    localStorage.setItem(key, JSON.stringify(item));
+  };
+
   useEffect(() => {
-      if (success) {
-        localStorage.setItem("codePass", userCode.codePass);
-        toast.success("Gửi email thành công !", {
+    if (success) {
+      setLocalStorageWithExpiry("codePass", userCode.codePass, 15);
+      toast.success("Gửi email thành công !", {
+        position: toast.POSITION.TOP_RIGHT,
+        type: toast.TYPE.SUCCESS,
+      });
+      dispatch(setSuccess(false));
+      setTimeout(() => {
+        navigate("/change-password");
+      }, 2000);
+    } else if (error) {
+      toast.error(
+        "Gửi email không thành công, hãy kiểm tra lại địa chỉ Email của bạn !",
+        {
           position: toast.POSITION.TOP_RIGHT,
-          type: toast.TYPE.SUCCESS,
-        });
-        dispatch(setSuccess(false));
-        setTimeout(() => {
-          navigate("/change-password");
-        }, 2000);
-      } else if (error) {
-        toast.error(
-          "Gửi email không thành công, hãy kiểm tra lại địa chỉ email của bạn !",
-          {
-            position: toast.POSITION.TOP_RIGHT,
-            type: toast.TYPE.ERROR,
-          }
-        );
+          type: toast.TYPE.ERROR,
+        }
+      );
+      dispatch(setError(null));
     }
-  }, [success]);
+  }, [success, error]);
 
   const handleInputChange = (e) => {
     setEmailData({ ...emailData, [e.target.name]: e.target.value });
@@ -64,10 +75,6 @@ function ForgetPassword() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     dispatch(forgotPasswordUser(emailData));
-    toast.success("Đang gửi email ... !", {
-      position: toast.POSITION.TOP_RIGHT,
-      type: toast.TYPE.DEFAULT,
-    });
   };
 
   return (
