@@ -1,0 +1,21 @@
+div.payment-method-choice{
+    border-radius: 10px;
+    border: solid 3px
+}
+div.payment-method-choice:has(input[type=radio]:checked){
+    border: #009a42 solid 3px;
+}
+
+div.choice{
+    font-weight: 500;
+}
+
+
+
+input[name="payment"] {
+    accent-color: #009a42;
+    scale: 1.5;
+}
+
+
+

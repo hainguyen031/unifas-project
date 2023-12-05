@@ -8,7 +8,6 @@ import com.unifasservice.entity.*;
 import com.unifasservice.repository.*;
 import com.unifasservice.service.CartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -29,81 +28,80 @@ public class CartServiceImpl implements CartService {
 
     private final CartItemConverter cartProductConverter;
 
-    private final CartProductRepository cartProductRepository;
+    private final CartItemRepository cartItemRepository;
 
     @Override
     public CommonResponse addToCart(String username, AddProductToCartRequest addProduct) {
 
         CommonResponse commonResponse = new CommonResponse();
 
-        AddProductToCartResponse addProductToCartResponse = new AddProductToCartResponse();
+//         AddProductToCartResponse addProductToCartResponse = new AddProductToCartResponse();
 
 
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
+//         User user = userRepository.findByUsername(username);
+//         if (user == null) {
 
-            commonResponse.builder()
-                    .message("User not found !")
-                    .statusCode(HttpStatus.BAD_REQUEST)
-                    .data(null)
-                    .build();
-            return commonResponse;
-        }
-
-
-        long productId = addProduct.getProductId();
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        if (product == null) {
-
-            commonResponse.builder()
-                    .message("Product not found !")
-                    .statusCode(HttpStatus.BAD_REQUEST)
-                    .data(null)
-                    .build();
-            return commonResponse;
+//             commonResponse.builder()
+//                     .message("User not found !")
+//                     .statusCode(HttpStatus.BAD_REQUEST)
+//                     .data(null)
+//                     .build();
+//             return commonResponse;
+//         }
 
 
-        }
+//         long productId = addProduct.getProductId();
+//         Product product = productRepository.findById(productId)
+//                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        long variantId = addProduct.getVariantId();
-        Variant variant = variantRepository.findById(variantId)
-                .orElseThrow(() -> new RuntimeException("Variant not found"));
+//         if (product == null) {
 
-        if (product.getVariantList() == null) {
-            product.setVariantList(new ArrayList<>());
-        }
-
-        variant.setProduct(product);
-        product.getVariantList().add(variant);
-
-        productRepository.save(product);
+//             commonResponse.builder()
+//                     .message("Product not found !")
+//                     .statusCode(HttpStatus.BAD_REQUEST)
+//                     .data(null)
+//                     .build();
+//             return commonResponse;
 
 
-        Cart cart = user.getCart();
-        if (cart == null) {
-            cart = new Cart();
-            cart.setUser(user);
-            user.setCart(cart);
-        }
+//         }
 
-        CartItem cartProduct = new CartItem();
-        cartProduct.setProduct(product);
-        cartProduct.setCart(cart);
-        cartRepository.save(cart);
+//         long variantId = addProduct.getVariantId();
+//         Variant variant = variantRepository.findById(variantId)
+//                 .orElseThrow(() -> new RuntimeException("Variant not found"));
+
+// //        if (product.getVariantList() == null) {
+// //            product.setVariantList(new ArrayList<>());
+// //        }
+
+// //        variant.setProduct(product);
+// //        product.getVariantList().add(variant);
+
+//         productRepository.save(product);
 
 
-        addProductToCartResponse.setId(product.getId());
-        addProductToCartResponse.setQuantity(addProduct.getQuantity());
-        addProductToCartResponse.setPrice(product.getPrice());
-        addProductToCartResponse.setSubtotal(addProduct.getQuantity() * product.getPrice());
+//         Cart cart = user.getCart();
+//         if (cart == null) {
+//             cart = new Cart();
+//             cart.setUser(user);
+//             user.setCart(cart);
+//         }
 
+//         CartItem cartProduct = new CartItem();
+//         cartProduct.setProduct(product);
+//         cartProduct.setCart(cart);
+//         cartRepository.save(cart);
+
+
+//         addProductToCartResponse.setId(product.getId());
+//         addProductToCartResponse.setQuantity(addProduct.getQuantity());
+//         addProductToCartResponse.setPrice(product.getPrice());
+//         addProductToCartResponse.setSubtotal(addProduct.getQuantity() * product.getPrice());
 
         commonResponse.builder()
                 .message("Product added to cart successfully !")
                 .statusCode(HttpStatus.OK)
-                .data(addProductToCartResponse)
+                .data("fix")
                 .build();
         return commonResponse;
 
@@ -170,7 +168,7 @@ public class CartServiceImpl implements CartService {
 
                 cartProduct.setQuantity(newQuantity);
                 cartProduct.setSubtotal(newQuantity*cartProduct.getPrice());
-                cartProductRepository.save(cartProduct);
+                cartItemRepository.save(cartProduct);
 
                 responseDto.setId(cartProduct.getId());
                 responseDto.setName(cartProduct.getProduct().getName());

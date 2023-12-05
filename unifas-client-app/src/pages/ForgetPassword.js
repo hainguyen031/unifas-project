@@ -12,7 +12,7 @@ import {
   selectUserCodePass,
   setError,
   setSuccess,
-} from "../feature/userSlice";
+} from "../feature/user/userSlice";
 
 function ForgetPassword() {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ function ForgetPassword() {
 
   useEffect(() => {
     if (success) {
-      setLocalStorageWithExpiry("codePass", userCode.codePass, 15);
+      setLocalStorageWithExpiry("codePass", userCode, 15);
       toast.success("Gửi email thành công !", {
         position: toast.POSITION.TOP_RIGHT,
         type: toast.TYPE.SUCCESS,
@@ -75,6 +75,10 @@ function ForgetPassword() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     dispatch(forgotPasswordUser(emailData));
+    // toast.success("Đang gửi email ... !", {
+      // position: toast.POSITION.TOP_RIGHT,
+      // type: toast.TYPE.DEFAULT,
+    // });
   };
 
   return (
@@ -106,7 +110,6 @@ function ForgetPassword() {
                     style={{
                       display: "flex",
                       position: "relative",
-                      marginBottom: 30,
                     }}
                   >
                     <div>Vui lòng nhập địa chỉ email bạn đã đăng ký</div>
@@ -158,7 +161,7 @@ function ForgetPassword() {
                         className="btn"
                         style={{ width: 200, justifyContent: "center" }}
                       >
-                        {pending ? "Gửi..." : "Gửi"}
+                        {pending ? "Đang gửi..." : "Gửi"}
                       </button>
                     </div>
                   </form>

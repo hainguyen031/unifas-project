@@ -8,7 +8,7 @@ import {
   selectSuccessChangePass,
   setError,
   setSuccessChangePass,
-} from "../feature/userSlice";
+} from "../feature/user/userSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -20,9 +20,23 @@ function ChangePassword() {
   const pending = useSelector(selectLoading);
   const error = useSelector(selectError);
 
+  const getEmailStorageWithExpiry = (key) => {
+    const itemStr = localStorage.getItem(key);
+    if (!itemStr) {
+      return null;
+    }
+    const item = JSON.parse(itemStr);
+    const now = new Date();
+    if (now.getTime() > item.expiredTime) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return item.verificationCodes.email;
+  };
+
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: getEmailStorageWithExpiry("codePass"),
       password: "",
       confirmPassword: "",
       verificationCodes: "",
@@ -50,11 +64,13 @@ function ChangePassword() {
       verificationCodes: Yup.string().required("Mã xác thực là bắt buộc."),
     }),
   });
+
   const [data, setData] = useState({
-    email: "",
+    email: getEmailStorageWithExpiry("codePass"),
     password: "",
     verificationCodes: "",
   });
+
   useEffect(() => {
     if (success) {
       toast.success("Đổi mật khẩu thành công !", {
@@ -93,11 +109,11 @@ function ChangePassword() {
     const item = JSON.parse(itemStr);
     const now = new Date();
     if (now.getTime() > item.expiredTime) {
-      localStorage.removeItem(key);
-      return null;
+      return "OutExp";
     }
-    return item.verificationCodes;
+    return item.verificationCodes.codePass;
   };
+
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -105,12 +121,18 @@ function ChangePassword() {
     if (checkCode === formik.values.verificationCodes) {
       dispatch(changePasswordUser(formik.values));
       dispatch(setSuccessChangePass(false));
-    } else {
+      localStorage.removeItem("codePass");
+    } else if(checkCode ==="OutExp"){
+      toast.error("Mã xác thực hết hạn !", {
+        position: toast.POSITION.TOP_RIGHT,
+        type: toast.TYPE.ERROR,
+      });
+    } else{
       toast.error("Mã xác thực sai !", {
         position: toast.POSITION.TOP_RIGHT,
         type: toast.TYPE.ERROR,
       });
-    }
+      } 
   };
 
   return (
@@ -134,38 +156,22 @@ function ChangePassword() {
               style={{
                 display: "flex",
                 position: "relative",
-                marginBottom: 30,
+                // marginBottom: 30,
               }}
             >
               <div>Vui lòng nhập mật khẩu mới</div>
             </div>
             <form onSubmit={handleFormSubmit}>
               <div className=" row mb-3">
-                <div className="col-4">
-                  <label htmlFor="email" className="text-dark">
-                    EMAIL
-                  </label>
-                </div>
                 <div className="col-8">
                   <input
-                    type="email"
+                    type="hidden"
                     id="email"
                     name="email"
-                    value={data.email}
-                    onChange={handleInputChange}
-                    placeholder="Nhập email"
+                    value={getEmailStorageWithExpiry("codePass")}
                     style={{ width: "100%" }}
-                    required
-                    {...formik.getFieldProps("email")}
+                    disabled
                   ></input>
-                  {formik.touched.email && formik.errors.email && (
-                    <div
-                      className="error-message text-danger"
-                      style={{ fontSize: 14 }}
-                    >
-                      {formik.errors.email}
-                    </div>
-                  )}
                 </div>
               </div>
               <div className=" row mb-3">

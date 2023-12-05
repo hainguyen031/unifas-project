@@ -11,7 +11,7 @@ function Footer() {
           <div className="col-3 mx-0 px-0">
             <div className="footer-widget">
               <div className="f-logo">
-                <Link to="/"><img src="img/logo/logo.png" alt="" /></Link>
+                <Link to="/"><img src="/img/logo/UNIFAS-200px.png" alt="" style={{maxWidth : "20%"}} /></Link>
               </div>
               <div className="footer-text">
                 <p>Wear healthy, feel healthy. Our clothes are made from natural and organic materials</p>
@@ -73,11 +73,11 @@ function Footer() {
           </div>
           <div className="col-3 mx-0 px-0">
             <div className="footer-widget">
-              <h4 className="fw-title">E-Newsletterr</h4>
+              <h4 className="fw-title">E-Newsletter</h4>
               <div className="fw-link">
                 <ul>
                   <li><span style={{fontSize : "14px", color : "#676666"}}>Sign up and be the first-in-the know about new arrivals, promotions, in-store events and more.</span></li>
-                  <li><h1><Link to="/adoption" style={{fontSize : "15px", fontWeight : "900", backgroundColor : "red", padding : "9px", borderRadius : "15px", color : "white"}}>SUBCRIBE NOW</Link></h1></li>
+                  <li><h1><Link to="/adoption" style={{fontSize : "15px", fontWeight : "900", backgroundColor : "red", padding : "9px", borderRadius : "15px", color : "white"}}>SUBSCRIBE NOW</Link></h1></li>
                 </ul>
               </div>
             </div>
@@ -91,7 +91,7 @@ function Footer() {
         <div className="row">
           <div className="col-md-8">
             <div className="copyright-text">
-              <p>Copyright © 2022 UNIFAS. All Rights Reserved.</p>
+              <p>Copyright © 2023 UNIFAS. All Rights Reserved.</p>
             </div>
           </div>
           <div className="col-md-4 d-none d-md-block">
@@ -105,6 +105,7 @@ function Footer() {
                 {/*  <Link className="dropdown-item" to="/"><img src="img/icon//thailand.png" alt="" />Thailand</Link>*/}
                 {/*  <Link className="dropdown-item" to="/"><img src="img/icon/india.png" alt="" />India</Link>*/}
                 {/*</div>*/}
+            {/*  </div>*/}
               {/*</div>*/}
             {/*</div>*/}
           </div>

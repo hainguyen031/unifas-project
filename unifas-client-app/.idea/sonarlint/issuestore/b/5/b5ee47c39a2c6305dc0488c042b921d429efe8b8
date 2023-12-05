@@ -1,0 +1,20 @@
+
+Njavascript:S1128"-Remove this unused import of 'selectLoading'.(åË‚Áùÿÿÿÿ
+Gjavascript:S1128"+Remove this unused import of 'selectError'.(´ú‚ˆ
+Ijavascript:S1128"-Remove this unused import of 'selectSuccess'.(±‰Àç
+cjavascript:S14810"GRemove the declaration of the unused 'filterDistrictsForEdit' variable.(»ŒŒÖ
+`javascript:S18540"DRemove this useless assignment to variable "filterDistrictsForEdit".(»ŒŒÖ
+fjavascript:S14810"JRemove the declaration of the unused 'setFilterDistrictsForEdit' variable.(»ŒŒÖ
+cjavascript:S18540"GRemove this useless assignment to variable "setFilterDistrictsForEdit".(»ŒŒÖ
+djavascript:S14811"CRemove the declaration of the unused 'filterWardsForEdit' variable.(İİÍ³ÿÿÿÿÿ
+ajavascript:S18541"@Remove this useless assignment to variable "filterWardsForEdit".(İİÍ³ÿÿÿÿÿ
+gjavascript:S14811"FRemove the declaration of the unused 'setFilterWardsForEdit' variable.(İİÍ³ÿÿÿÿÿ
+djavascript:S18541"CRemove this useless assignment to variable "setFilterWardsForEdit".(İİÍ³ÿÿÿÿÿ
+1javascript:S108h"Empty block statement.(¹”ÿ
+Kjavascript:S5869w"*Remove duplicates in this character class.(ß²¹ÿÿÿÿÿ
+ijavascript:S4138Ï"LExpected a `for-of` loop instead of a `for` loop with this simple iteration.(Ëë¯Ù
+Zjavascript:S1481Ú"8Remove the declaration of the unused 'address' variable.(çôÙÙúÿÿÿÿ
+Wjavascript:S1854Ú"5Remove this useless assignment to variable "address".(çôÙÙúÿÿÿÿ
+Ljavascript:S6477¸"*Missing "key" prop for element in iterator(œÂéîùÿÿÿÿ
+qjavascript:S3776£"TRefactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.(¹…§ó
+qjavascript:S3776Ê"TRefactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.(¹…§ó

@@ -22,9 +22,6 @@ public class Cart {
     @Column(name = "ID")
     private long id;
 
-    @Column(name = "TOTAL_AMOUNT")
-    private double totalAmount;
-
     @OneToOne
     @JoinColumn(name = "USER_ID")
     private User user;

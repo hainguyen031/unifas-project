@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "PRODUCT")
-@Where(clause = "IS_DELETED = 'FALSE'")
+@Where(clause = "IS_DELETED = 0")
 public class Product {
 
     @Id
@@ -49,9 +49,6 @@ public class Product {
     private SubCategory subCategory;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<Variant>  variantList ;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductImage>  imageProductList ;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
@@ -63,6 +60,6 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderLine>  orderLineList ;
 
-
-
+    @OneToMany(mappedBy = "product")
+    private List<Variant> variantList;
 }

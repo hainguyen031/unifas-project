@@ -1,8 +1,10 @@
 package com.unifasservice.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -11,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "VARIANT")
+@Where(clause = "IS_DELETED = 0")
 public class Variant {
 
     @Id
@@ -29,9 +32,13 @@ public class Variant {
     @JoinColumn(name = "SIZE_ID")
     private Size size;
 
+    @OneToMany(mappedBy = "variant", fetch = FetchType.LAZY)
+    private List<CartItem> cartItemList ;
+
+    @OneToMany(mappedBy = "variant", fetch = FetchType.LAZY)
+    private List<OrderLine> orderLineList ;
+
     @ManyToOne
-    @JoinColumn(name = "PRODUCT_ID")
+    @JoinColumn( name = "PRODUCT_ID" )
     private Product product;
-
-
 }

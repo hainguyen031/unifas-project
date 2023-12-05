@@ -1,0 +1,25 @@
+
+3	css:S4656°"Unexpected duplicate "border"(ŒşÉù
+<	css:S4656²"!Unexpected duplicate "box-shadow"(³ìü¬úÿÿÿÿ
+3	css:S4656ò"Unexpected duplicate "border"(ŒşÉù
+<	css:S4656ô"!Unexpected duplicate "box-shadow"(³ìü¬úÿÿÿÿ
+:	css:S4656Ø"$Unexpected duplicate "border-radius"(ÆÅÃ–
+U	css:S4657±":Unexpected shorthand "background" after "background-color"(ç—Áæşÿÿÿÿ
+U	css:S4657ó":Unexpected shorthand "background" after "background-color"(ç—Áæşÿÿÿÿ
+N	css:S4657Æ"3Unexpected shorthand "margin" after "margin-bottom"(ÕÛ°©ıÿÿÿÿ
+A	css:S4649ä
+"&Unexpected missing generic font family(öø¦Òúÿÿÿÿ
+<	css:S4649–"&Unexpected missing generic font family(²Éî³
+A	css:S4649”"&Unexpected missing generic font family(öø¦Òúÿÿÿÿ
+A	css:S4649× "&Unexpected missing generic font family(öø¦Òúÿÿÿÿ
+\	css:S4666X"BUnexpected duplicate selector "input:focus", first used at line 88(¯ŒÃˆøÿÿÿÿ
+Z	css:S4666â"DUnexpected duplicate selector ".navbar-wrap", first used at line 383(ÇÊ¼
+]	css:S4666æ"GUnexpected duplicate selector ".navbar-wrap ul", first used at line 387(È’í
+e	css:S4666ì"JUnexpected duplicate selector ".navbar-wrap ul li", first used at line 393(ÀÒæ˜ıÿÿÿÿ
+b	css:S4666ï"LUnexpected duplicate selector ".navbar-wrap ul li a", first used at line 397(ŒŸ²ƒ
+p	css:S4666û"ZUnexpected duplicate selector ".navbar-wrap > ul > li > a::before", first used at line 409(ÈğäÈ
+±	css:S4666‘"•Unexpected duplicate selector ".navbar-wrap > ul > li.active > a,
+.navbar-wrap > ul > li:hover > a", first used at line 431 (no-duplicate-selectors)(—ãşÿÿÿÿ
+j	css:S4666Õ	"TUnexpected duplicate selector ".slider-active .slick-arrow", first used at line 1231(ŸÁ÷Å
+_	css:S4666Ò"IUnexpected duplicate selector ".cart-plus-minus", first used at line 2892(‹‚ğš
+=	css:S4670O"(Unexpected unknown type selector "-menu"(òÕ¾Ø

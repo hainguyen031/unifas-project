@@ -1,10 +1,10 @@
 package com.unifasservice.service.impl;
 
 import com.unifasservice.dto.payload.CommonResponse;
-import com.unifasservice.dto.request.ChangePassRequestDto;
-import com.unifasservice.dto.request.ForgetPassRequestDto;
-import com.unifasservice.dto.response.CodePassResponseDto;
-import com.unifasservice.dto.response.DataMailDto;
+import com.unifasservice.dto.payload.request.ChangePassRequest;
+import com.unifasservice.dto.payload.request.ForgetPassRequest;
+import com.unifasservice.dto.payload.response.CodePassResponse;
+import com.unifasservice.dto.payload.response.DataMailResponse;
 import com.unifasservice.security.JwtTokenUtil;
 import com.unifasservice.converter.UserLoginConverter;
 import com.unifasservice.dto.payload.request.UserLoginRequest;
@@ -42,8 +42,6 @@ public class UserServiceImpl implements UserService {
 
     public CommonResponse login(UserLoginRequest login) {
 
-        CommonResponse commonResponse = new CommonResponse();
-
         String email = login.getEmail();
         String password = login.getPassword();
 
@@ -61,16 +59,15 @@ public class UserServiceImpl implements UserService {
 
                 String token = jwtTokenUtil.generateToken(user);
                 loginResponseDTO.setToken(token);
+                loginResponseDTO.setId(user.getId());
                 loginResponseDTO.setRole(user.getRole());
 
 
-                commonResponse.builder()
+            return    CommonResponse.builder()
                         .message("Logged in Successfully !")
                         .statusCode(HttpStatus.OK)
                         .data(loginResponseDTO)
                         .build();
-                return commonResponse;
-
 
             } else {
                 throw new RuntimeException("Wrong password");
@@ -81,22 +78,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponse register(UserRegisterRequest userRegisterRequestDTO) {
+    public CommonResponse register(UserRegisterRequest userRegisterRequest) {
 
-        String password = userRegisterRequestDTO.getPassword();
+        String password = userRegisterRequest.getPassword();
         String hashCode = passwordEncoder.encode(password);
 
-        User userNameCheck = userRepository.findByUsername(userRegisterRequestDTO.getUsername());
+        User userNameCheck = userRepository.findByUsername(userRegisterRequest.getUsername());
         if (userNameCheck != null) {
             return getCommonResponse("This account already exists", HttpStatus.BAD_REQUEST, false);
         }
-        User emailCheck = userRepository.findByEmail(userRegisterRequestDTO.getEmail());
+        User emailCheck = userRepository.findByEmail(userRegisterRequest.getEmail());
         if (emailCheck != null) {
             return getCommonResponse("Email exists, please enter another email!", HttpStatus.BAD_REQUEST, false);
         }
         try {
 
-            User user = userRegisterConverter.convertDTORequestToEntity(userRegisterRequestDTO);
+            User user = userRegisterConverter.convertDTORequestToEntity(userRegisterRequest);
             user.setPassword(hashCode);
             user.setDeleted(false);
 
@@ -121,15 +118,16 @@ public class UserServiceImpl implements UserService {
 
     }
     @Override
-    public CodePassResponseDto createCodePass(ForgetPassRequestDto forgetPassReqDTO) {
-        User emailCheck = userRepository.findByEmail(forgetPassReqDTO.getEmail());
+    public CodePassResponse createCodePass(ForgetPassRequest forgetPassRequest) {
+        User emailCheck = userRepository.findByEmail(forgetPassRequest.getEmail());
         if (emailCheck != null) {
             String randomString = generateRandomString(6);
-            CodePassResponseDto responseDTO = new CodePassResponseDto();
-            responseDTO.setCodePass(randomString);
+            CodePassResponse responseDto = new CodePassResponse();
+            responseDto.setCodePass(randomString);
+            responseDto.setEmail(emailCheck.getEmail());
             try {
-                DataMailDto dataMail = new DataMailDto();
-                dataMail.setTo(forgetPassReqDTO.getEmail());
+                DataMailResponse dataMail = new DataMailResponse();
+                dataMail.setTo(forgetPassRequest.getEmail());
                 dataMail.setSubject("Yêu cầu đặt lại mật khẩu");
                 Map<String, Object> props = new HashMap<>();
                 props.put("codePass", randomString);
@@ -140,16 +138,16 @@ public class UserServiceImpl implements UserService {
             } catch (javax.mail.MessagingException e) {
                 throw new RuntimeException(e);
             }
-            return responseDTO;
+            return responseDto;
         }
         return null;
     }
 
     @Override
-    public boolean changePass(ChangePassRequestDto changePassReqDTO) {
-        User emailCheck = userRepository.findByEmail(changePassReqDTO.getEmail());
+    public boolean changePass(ChangePassRequest changePassRequest) {
+        User emailCheck = userRepository.findByEmail(changePassRequest.getEmail());
         if (emailCheck != null) {
-            String hashCode = passwordEncoder.encode(changePassReqDTO.getNewPass());
+            String hashCode = passwordEncoder.encode(changePassRequest.getNewPass());
             emailCheck.setPassword(hashCode);
             userRepository.save(emailCheck);
             return true;

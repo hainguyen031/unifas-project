@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/auth/login",
                         "/auth/register",
-                        "/category").permitAll()
+                        "/categories").permitAll()
 
 
 

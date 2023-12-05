@@ -15,5 +15,4 @@ public class CommonResponse {
     private Object data;
     private String message;
     private HttpStatus statusCode;
-
 }

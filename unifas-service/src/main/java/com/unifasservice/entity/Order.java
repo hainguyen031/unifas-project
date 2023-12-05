@@ -27,10 +27,17 @@ public class Order {
     private LocalDateTime date;
 
     @Column(name = "TOTAL_AMOUNT")
-    private double totalAmount;
+    private long totalAmount;
 
-    @Column(name = "ADDRESS")
-    private String address;
+    @Column(name = "FINAL_PRICE")
+    private long finalPrice;
+
+    @Column(name = "PAYMENT")
+    private String payment;
+
+    @ManyToOne
+    @JoinColumn(name = "ADDRESS_ID")
+    private Address address;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -38,7 +45,5 @@ public class Order {
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderLine> orderLineList ;
-
-
 
 }

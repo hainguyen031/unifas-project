@@ -23,7 +23,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    @PostMapping("/add-product")
+    @PostMapping("")
     public ResponseEntity<CommonResponse> addToCart(
             @RequestBody AddProductToCartRequest addProduct,
             Authentication authentication) {
@@ -52,6 +52,7 @@ public class CartController {
 
 
     @PutMapping("/{cartProductId}")
+
     public ResponseEntity<CommonResponse> updateCartProduct(
             @PathVariable("cartProductId") long cartProductId,
             @RequestBody UpdateCartProductRequest updateRequest,
@@ -78,6 +79,9 @@ public class CartController {
         } catch (Exception e) {
             return (ResponseEntity<DeleteCartItemResponse>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);        }
     }
+
+
+
 
 
 }

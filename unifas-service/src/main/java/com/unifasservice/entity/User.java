@@ -28,9 +28,6 @@ public class User {
     @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
 
-    @Column(name="PHONE_NUMBER")
-    private String phoneNumber;
-
     @Column(name = "ROLE")
     private String role;
 

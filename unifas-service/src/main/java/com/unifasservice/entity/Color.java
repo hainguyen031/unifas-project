@@ -1,5 +1,7 @@
 package com.unifasservice.entity;
 import lombok.*;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "COLOR")
-
+@Where(clause = "IS_DELETED = 0")
 public class Color {
 
     @Id
@@ -20,6 +22,12 @@ public class Color {
 
     @Column(name = "NAME")
     private String name;
+
+    @Column(name = "CODE")
+    private String code;
+
+    @Column(name = "ACRONYM")
+    private String acronym;
 
     @Column(name = "IS_DELETED")
     private boolean isDeleted;

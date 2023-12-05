@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "CART_PRODUCT")
+@Table(name = "CART_ITEM")
 
 
 public class CartItem {
@@ -25,10 +25,10 @@ public class CartItem {
     private int quantity;
 
     @Column(name = "PRICE")
-    private double price;
+    private long price;
 
     @Column(name = "SUBTOTAL")
-    private double subtotal;
+    private long subtotal;
 
     @ManyToOne
     @JoinColumn(name = "CART_ID")
@@ -37,6 +37,10 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "VARIANT_ID")
+    private Variant variant;
 
     @Column(name = "IS_DELETED")
     private boolean isDeleted;

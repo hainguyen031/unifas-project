@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface SaleVoucherRepository  extends JpaRepository<SaleVoucher, Long> {
+    SaleVoucher findByCode(String code);
 }

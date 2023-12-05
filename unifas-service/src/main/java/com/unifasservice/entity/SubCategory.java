@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SUB_CATEGORY")
-@Where(clause = "IS_SHOWN = 'TRUE'")
+@Where(clause = "IS_SHOWN = 1")
 public class SubCategory {
 
     @Id

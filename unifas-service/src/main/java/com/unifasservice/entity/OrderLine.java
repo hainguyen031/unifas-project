@@ -25,14 +25,18 @@ public class OrderLine {
     private int quantity;
 
     @Column(name = "PRICE")
-    private double price;
+    private long price;
 
     @Column(name = "SUBTOTAL")
-    private double subtotal;
+    private long subtotal;
 
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "VARIANT_ID")
+    private Variant variant;
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")

@@ -1,6 +1,6 @@
 import React from "react";
-import LoginForm from "../components/account/LoginForm";
-import Subscribe from "../components/account/Subscribe";
+import LoginForm from "../components/main/account/LoginForm";
+import Subscribe from "../components/main/account/Subscribe";
 
 function LoginPage() {
   return (

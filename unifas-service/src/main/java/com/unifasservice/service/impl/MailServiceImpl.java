@@ -1,10 +1,9 @@
 package com.unifasservice.service.impl;
 
-import com.unifasservice.dto.response.DataMailDto;
+import com.unifasservice.dto.payload.response.DataMailResponse;
 import com.unifasservice.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -24,18 +23,18 @@ public class MailServiceImpl implements MailService {
 
     private final ITemplateEngine templateEngine;
     @Override
-    public void sendHtmlMail(DataMailDto dataMailDto, String templateName) throws MessagingException {
+    public void sendHtmlMail(DataMailResponse dataMailResponse, String templateName) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
 
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
 
         Context context = new Context();
-        context.setVariables(dataMailDto.getProps());
+        context.setVariables(dataMailResponse.getProps());
 
         String html = templateEngine.process(templateName, context);
 
-        helper.setTo(dataMailDto.getTo());
-        helper.setSubject(dataMailDto.getSubject());
+        helper.setTo(dataMailResponse.getTo());
+        helper.setSubject(dataMailResponse.getSubject());
         helper.setText(html, true);
 
         mailSender.send(message);
