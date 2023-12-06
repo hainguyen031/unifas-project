@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCategoryList } from "../../api/categoryAPI";
+import { addCategory, getCategoryList, getCategoryPage } from "../../api/categoryAPI";
 
 const initialState = {
     values: null,
@@ -14,55 +14,108 @@ export const getCategories = createAsyncThunk("categories", async () => {
     return response.data;
 });
 
+export const getCategoriesPage = createAsyncThunk("categoriesPage", async (page) => {
+  const response = await getCategoryPage(page);
+  return response.data;
+});
+
+export const addNewCategory = createAsyncThunk(
+  "addCategory",
+  async (data) => {
+    const response = await addCategory(data);
+    return response.data;
+  }
+);
 export const categorySlice = createSlice({
-    name: "category",
-    initialState,
-    reducers: {
-        setCategoryLoading: (state, action) => {
-            state.loading = action.payload;
-        },
-
-        setCategoryError: (state, action) => {
-            state.error = action.payload;
-        },
-
-        setCategorySuccess: (state, action) => {
-            state.success = action.payload;
-        },
+  name: "category",
+  initialState,
+  reducers: {
+    setCategoryLoading: (state, action) => {
+      state.loading = action.payload;
     },
 
-    extraReducers: (builder) => {
-        builder
-        // List
-        .addCase(getCategories.pending, (state) => {
-            state.success = false;
-            state.loading = true;
-            state.error = false;
-        })
-        .addCase(getCategories.rejected, (state, action) => {
-            state.success = false;
-            state.loading = false;
-            state.error = action.error;
-        })
-        .addCase(getCategories.fulfilled, (state, action) => {
-            state.success = true;
-            state.loading = false;
-            state.values = action.payload;
-            state.error = false;
-        })
+    setCategoryError: (state, action) => {
+      state.error = action.payload;
     },
+
+    setCategorySuccess: (state, action) => {
+      state.success = action.payload;
+    },
+    setAddCategory: (state, action) => {
+      state.success = action.payload;
+    },
+  },
+
+  extraReducers: (builder) => {
+    builder
+      // List
+      .addCase(getCategories.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getCategories.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(getCategories.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.values = action.payload;
+        state.error = false;
+      })
+      // Page
+      .addCase(getCategoriesPage.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getCategoriesPage.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(getCategoriesPage.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.value = action.payload;
+        state.error = false;
+      })
+      // add category
+      .addCase(addNewCategory.pending, (state) => {
+        state.success = false;
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(addNewCategory.rejected, (state, action) => {
+        state.success = false;
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(addNewCategory.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.value = action.payload;
+        state.error = false;
+      });
+  },
 });
 
 export const {
-    setCategoryLoading,
-    setCategoryError,
-    setCategorySuccess
+  setCategoryLoading,
+  setCategoryError,
+  setCategorySuccess,
+  setAddCategory,
 } = categorySlice.actions;
 
 export const selectCategoryLoading = (state) => state.category.loading;
 export const selectCategoryError = (state) => state.category.error;
 export const selectCategorySuccess = (state) => state.category.success;
 export const selectCategories = (state) => state.category.values;
+export const selectCategoriesPage = (state) => state.category.value;
+export const selectAddCategories = (state) => state.category.value;
+
 
 export const setLoadingTrueIfCalled = (isCalled) => (dispatch, getState) => {
     const currentValue = selectCategoryLoading(getState());

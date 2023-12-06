@@ -35,4 +35,10 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Product> productList ;
+
+    public Category(String name, String gender, boolean isShown) {
+        this.name = name;
+        this.gender = gender;
+        this.isShown = isShown;
+    }
 }

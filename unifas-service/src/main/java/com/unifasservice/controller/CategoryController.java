@@ -1,14 +1,18 @@
 package com.unifasservice.controller;
 
+import com.unifasservice.dto.payload.request.AddCategoryRequest;
 import com.unifasservice.dto.payload.response.CategoryResponse;
+import com.unifasservice.dto.payload.response.PageResponse;
 import com.unifasservice.service.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +28,22 @@ public class CategoryController {
     public ResponseEntity<List<CategoryResponse>> getAllCategory() {
         List<CategoryResponse> categories = categoryService.findAll();
         return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<?> getAllCategoryPageable(Pageable pageable) {
+        Pageable pageableRequest = PageRequest.of(pageable.getPageNumber(), 15, Sort.by(Sort.Order.asc("id")));
+        PageResponse<CategoryResponse> categories = categoryService.findAllPageable(pageableRequest);
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addNewCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
+        Boolean result = categoryService.addCategory(addCategoryRequest);
+        if (result) {
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        }
     }
 }

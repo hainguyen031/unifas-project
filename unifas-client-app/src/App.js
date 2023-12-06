@@ -15,6 +15,7 @@ import DashBoard from "./components/main/account/DashBoard";
 import List from "./pages/list/List";
 import AdminProduct from "./pages/adminSide/AdminProduct";
 import UserDetailPage from "./pages/UserDetailPage";
+import AdminCategory from "./pages/adminSide/AdminCategory";
 
 
 
@@ -29,7 +30,6 @@ function App() {
 
   return (
     <div className="App">
-  
       {loading ? (
         <Loading />
       ) : (
@@ -47,6 +47,7 @@ function App() {
             <Route path="/users" element={<List />}></Route>
             <Route path="/products" element={<AdminProduct />}></Route>
             <Route path="/user-detail" element={<UserDetailPage />}></Route>
+            <Route path="/category" element={<AdminCategory />}></Route>
           </Routes>
           <Footer />
         </>
