@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewCategory,
   getCategoriesPage,
+  removeCategory,
   selectAddCategories,
   selectCategoriesPage,
   selectCategoryError,
   selectCategoryLoading,
   selectCategorySuccess,
-  setAddCategory,
 } from "../../feature/category/categorySlice";
 import { Link } from "react-router-dom";
 import { Button, Form, Modal } from "react-bootstrap";
@@ -25,74 +25,83 @@ function AdminCategory() {
   const error = useSelector(selectCategoryError);
   const [category, setCategory] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [reRender, setReRender] = useState(false);
+  const [page, setPage] = useState(0);
+  const [show, setShow] = useState(false);
   const [data, setData] = useState({
     name: "",
     gender: "",
   });
   useEffect(() => {
-    if (category?.length === 0) {
-      dispatch(getCategoriesPage());
+    if (category?.length === 0 || reRender) {
+      dispatch(getCategoriesPage(page));
     }
     setCategory(listCategory);
+    setReRender(false);
   }, [listCategory]);
-  //   useEffect(() => {
-  //     if (checkAddCategory) {
-  //       toast.success("Đổi mật khẩu thành công !", {
-  //         position: toast.POSITION.TOP_RIGHT,
-  //         type: toast.TYPE.SUCCESS,
-  //       });
-  //       // dispatch(setSuccessChangePass(false));
-  //       closeModal();
-  //     } {
-  //       toast.error(
-  //         "Đổi mật khẩu thất bại, hãy kiểm tra lại địa chỉ Email của bạn !",
-  //         {
-  //           position: toast.POSITION.TOP_RIGHT,
-  //           type: toast.TYPE.ERROR,
-  //         }
-  //       );
-  //       // dispatch(setError(null));
-  //     }
-  //   }, [checkAddCategory]);
-  const handlePageChange = (page) => {
-    dispatch(getCategoriesPage(page));
+
+  const handlePageChange = (e) => {
+    setPage(e);
+    setReRender(true);
+    dispatch(getCategoriesPage(e));
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
+
   const openModal = () => {
     setModalOpen(true);
   };
+
   const closeModal = () => {
     setModalOpen(false);
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    console.log(data);
   };
+
+  const handleRemoveCategory = (e) => {
+    dispatch(removeCategory(e));
+    setReRender(true);
+    toast.success("Xóa category thành công !", {
+      position: toast.POSITION.TOP_RIGHT,
+      type: toast.TYPE.SUCCESS,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
     dispatch(addNewCategory(data));
     if (checkAddCategory) {
       toast.success("Thêm mới thành công !", {
         position: toast.POSITION.TOP_RIGHT,
         type: toast.TYPE.SUCCESS,
       });
+      setReRender(true);
       closeModal();
-    } else {
+    } else if (error) {
       toast.error("Thêm mới thất bại !", {
         position: toast.POSITION.TOP_RIGHT,
         type: toast.TYPE.ERROR,
       });
+    //   dispatch(setCategoryError(null));
     }
-    dispatch(setAddCategory(null));
+    // dispatch(setAddCategory(null));
   };
+  
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+    const handleSaveChanges = () => {
+     console.log(data);
+    };
+
   return (
     <div className="list">
       <Sidebar />
@@ -153,11 +162,19 @@ function AdminCategory() {
                   </div>
                 </>
               </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={closeModal}>
+              <Modal.Footer style={{ justifyContent: "center" }}>
+                <Button
+                  variant="secondary"
+                  onClick={closeModal}
+                  style={{ justifyContent: "center" }}
+                >
                   Close
                 </Button>
-                <Button variant="primary" onClick={handleSubmit}>
+                <Button
+                  variant="primary"
+                  onClick={handleSubmit}
+                  style={{ justifyContent: "center" }}
+                >
                   Add new
                 </Button>
               </Modal.Footer>
@@ -175,18 +192,81 @@ function AdminCategory() {
               </tr>
             </thead>
             <tbody>
-              {category?.content?.map((item, index) => (
-                <tr key={index}>
+              {category?.content?.map((item) => (
+                <tr key={item.id}>
                   <td>{item.id}</td>
                   <td>{item.name}</td>
                   <td>{item.gender}</td>
                   <td>
-                    <a class="m-2" href="#">
-                      <i class="fas fa-edit text-primary"></i>
-                    </a>
-                    <a class="m-2" href="#">
-                      <i class="fas fa-trash text-danger"></i>
-                    </a>
+                    <Link className="m-2" href="#" onClick={handleShow}>
+                      <i className="fas fa-edit text-primary"></i>
+                    </Link>
+                    <Link
+                      className="m-2"
+                      href="#"
+                      onClick={() => handleRemoveCategory(item.id)}
+                    >
+                      <i className="fas fa-trash text-danger"></i>
+                    </Link>
+                    <Modal show={show} onHide={handleClose}>
+                      <Modal.Header>
+                        <Modal.Title>Edit category</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <>
+                          <div className="input-group mb-3">
+                            <span
+                              className="input-group-text"
+                              id="inputGroup-sizing-default"
+                            >
+                              NAME
+                            </span>
+                            <input
+                              type="text"
+                              name="name"
+                              className="form-control"
+                              aria-label="Sizing example input"
+                              aria-describedby="inputGroup-sizing-default"
+                              onChange={handleInputChange}
+                              value={item.name}
+                            />
+                          </div>
+                          <div
+                            className="input-group mb-3"
+                            style={{ display: "flex" }}
+                          >
+                            <span
+                              className="input-group-text"
+                              id="inputGroup-sizing-default"
+                            >
+                              GENDER
+                            </span>
+                            <select
+                              className="form-select "
+                              name="gender"
+                              aria-label="Default select example"
+                              style={{ width: "fit-content" }}
+                              onChange={handleInputChange}
+                              value={item.gender}
+                            >
+                              <option selected>Open this select menu</option>
+                              <option value={"WOMEN"}>WOMEN</option>
+                              <option value={"MEN"}>MEN</option>
+                              <option value={"KIDS"}>KIDS</option>
+                              <option value={"BABY"}>BABY</option>
+                            </select>
+                          </div>
+                        </>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Close
+                        </Button>
+                        <Button variant="primary" onClick={handleSaveChanges}>
+                          Save Changes
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
                   </td>
                 </tr>
               ))}

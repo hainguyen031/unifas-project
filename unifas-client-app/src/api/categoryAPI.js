@@ -39,7 +39,35 @@ export const addCategory = async (data) => {
       },
     });
   } catch (e) {
-    console.error("add catogory API error: " + e);
+    console.error("add category API error: " + e);
+  }
+  return result;
+};
+
+export const deleteCategory = async (categoryId) => {
+  let result = null;
+  try {
+    result = await axios.delete(`${CATEGORY_MANAGEMENT}/${categoryId}`);
+  } catch (e) {
+    console.log("Delete category API error: " + e);
+  }
+  return result;
+};
+
+export const editCategory = async (data) => {
+  let result = null;
+  try {
+    result = await axios({
+      method: "put",
+      url: `${CATEGORY_MANAGEMENT}`,
+      data: {
+        id: data.id,
+        name: data.name,
+        gender: data.gender,
+      },
+    });
+  } catch (e) {
+    console.error("edit category API error: " + e);
   }
   return result;
 };

@@ -1,6 +1,7 @@
 package com.unifasservice.controller;
 
 import com.unifasservice.dto.payload.request.AddCategoryRequest;
+import com.unifasservice.dto.payload.request.UpdataCategoryRequest;
 import com.unifasservice.dto.payload.response.CategoryResponse;
 import com.unifasservice.dto.payload.response.PageResponse;
 import com.unifasservice.service.impl.CategoryServiceImpl;
@@ -44,6 +45,26 @@ public class CategoryController {
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        }
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId) {
+        Boolean result = categoryService.deleteCategory(categoryId);
+        if (result) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateCategory(@RequestBody UpdataCategoryRequest updataCategoryRequest) {
+        Boolean result = categoryService.updateCategory(updataCategoryRequest);
+        if (result) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
 }

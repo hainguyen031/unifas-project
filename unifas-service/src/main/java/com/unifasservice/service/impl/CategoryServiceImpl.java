@@ -3,6 +3,7 @@ package com.unifasservice.service.impl;
 import com.unifasservice.converter.CategoryConverter;
 import com.unifasservice.converter.CategoryResponseConverter;
 import com.unifasservice.dto.payload.request.AddCategoryRequest;
+import com.unifasservice.dto.payload.request.UpdataCategoryRequest;
 import com.unifasservice.dto.payload.response.CategoryResponse;
 import com.unifasservice.dto.payload.response.PageResponse;
 import com.unifasservice.entity.Category;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -59,6 +61,29 @@ public class CategoryServiceImpl implements CategoryService {
         Category checkCategory = categoryRepository.findByNameAndGender(addCategoryRequest.getName(), addCategoryRequest.getGender());
         if (checkCategory == null) {
             Category category = new Category(addCategoryRequest.getName(), addCategoryRequest.getGender(), true);
+            categoryRepository.save(category);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        if (category != null) {
+            category.setShown(false);
+            categoryRepository.save(category);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean updateCategory(UpdataCategoryRequest updataCategoryRequest) {
+        Category category = categoryRepository.findById(updataCategoryRequest.getId()).orElse(null);
+        if (category != null) {
+            category.setName(updataCategoryRequest.getName());
+            category.setGender(updataCategoryRequest.getGender());
             categoryRepository.save(category);
             return true;
         }
